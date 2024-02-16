@@ -1,71 +1,76 @@
 import { Request, Response } from 'express';
-import Article, { IArticle } from '../model/article';
-import upload from '../middleware/uploadMiddleware';
-import path from 'path';
-import fs from 'fs';
+import { ArticleModel, IArticle } from '../model/article';
 
 class ArticleController {
-    static async createArticle(req: Request, res: Response): Promise<Response> {
-        try {
-          const { title, text, image } = req.body;
-
-      
-          if (!title || !text) {
-            return res.status(400).json({ error: 'Title and text are required for an article' });
-          }
-          
-
-
-          const handleImageUpload = async (err: any): Promise<Response> => {
-            if (err) {
-              return res.status(500).json({ error: 'Error handling image upload' });
-            }
-            const imageFile: Express.Multer.File | undefined = req.file;
-            let image: string | undefined;
-      
-            if (imageFile) {
-              image = path.join('uploads', imageFile.filename);
-            } else {
-              return res.status(400).json({ error: 'Image file not uploaded' });
-            }
-      
-            const article: IArticle = await Article.create({ title, image, text });
-            return res.status(201).json(article);
-          };
-
-          const file=  upload.single('image')(req, res, handleImageUpload); 
-          const article: IArticle = await Article .create({ title, text, image:file});
-      return res.status(201).json(article);
-
-        }
-        catch (error) {
-          console.error('Error creating article:', error);
-          return res.status(500).json({ error: 'Internal Server Error' });
-          
-        }
-      }
-    
-
-
-
-
-
-
-
-
-  static async getAllArticles(req: Request, res: Response): Promise<Response> {
+  async createArticle(req: Request, res: Response): Promise<IArticle> {
     try {
-      const articles: IArticle[] = await Article.find();
+      const { title, text } = req.body;
+      const imagePath = req.file?.path; 
+
+      const newArticle: IArticle = new ArticleModel({ title, text, imagePath });
+
+      await newArticle.save();
+
+      return newArticle; 
+    } catch (error) {
+      console.error(error);
+  
+      throw error;
+    }
+  }
+
+  async updateArticle(req: Request, res: Response): Promise<IArticle | null> {
+    try {
+      const { id } = req.params;
+      const { title, text } = req.body;
+      const imagePath = req.file?.path; 
+
+      const updatedArticle = await ArticleModel.findByIdAndUpdate(
+        id,
+        { title, text, imagePath },
+        { new: true }
+      );
+
+      if (!updatedArticle) {
+
+        throw new Error('Article not found');
+      }
+
+      return updatedArticle; 
+    } catch (error) {
+      console.error(error);
+   
+      throw error;
+    }
+  }
+
+  async deleteArticle(req: Request, res: Response): Promise<IArticle | null> {
+    try {
+      const { id } = req.params;
+
+      const deletedArticle = await ArticleModel.findByIdAndDelete(id);
+
+      if (!deletedArticle) {
+        
+        throw new Error('Article not found');
+      }
+
+      return deletedArticle; 
+    } catch (error) {
+      console.error(error);
+      
+      throw error;
+    }
+  }
+  async getAllArticles(req: Request, res: Response): Promise<Response> {
+    try {
+      const articles: IArticle[] = await ArticleModel.find();
       return res.status(200).json(articles);
     } catch (error) {
       console.error('Error fetching articles:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
-
-  // Add other methods as needed
-
-  // ...
 }
 
-export default ArticleController;
+export default new ArticleController();

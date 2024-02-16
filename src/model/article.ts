@@ -1,26 +1,19 @@
+
+
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IArticle extends Document {
+interface IArticle extends Document {
   title: string;
-  image: string;
   text: string;
+  imagePath: string;
 }
 
-const articleSchema: Schema<IArticle> = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String,
-    required: true,
-  },
-  text: {
-    type: String,
-    required: true,
-  },
+const articleSchema: Schema = new Schema({
+  title: { type: String, required: true },
+  text: { type: String, required: true },
+  imagePath: { type: String, required: true },
 });
 
-const Article = mongoose.model<IArticle>('Article', articleSchema);
+const ArticleModel = mongoose.model<IArticle>('Article', articleSchema);
 
-export default Article;
+export { ArticleModel, IArticle };

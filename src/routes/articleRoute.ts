@@ -1,14 +1,13 @@
-import express from "express";
 
-import articleController from "../controllers/articleController";
-import upload from '../middleware/uploadMiddleware';
 
-const articleRoute=express.Router();
+import express from 'express';
+import { upload } from '../middleware/uploadMiddleware';
+import articleController from '../controllers/articleController';
 
-articleRoute.get("/articles",articleController.getAllArticles);
-articleRoute.post("/create_article", upload.single('image'),articleController.createArticle);
-/*
-articleRoute.put("/users/:userId",articleController.updateUser);
-articleRoute.delete("/users/:userId",articleController.deleteUser);*/
+const  ArticleRoute = express.Router();
+ArticleRoute.get('/articles', articleController.getAllArticles);
+ArticleRoute.post('/create', upload.single('image'), articleController.createArticle);
+ArticleRoute.put('/articles/:id', upload.single('image'), articleController.updateArticle);
+ArticleRoute.delete('/articles/:id', articleController.deleteArticle);
 
-export default articleRoute;
+export default ArticleRoute;

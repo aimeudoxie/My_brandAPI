@@ -16,6 +16,7 @@ class UserController {
 
       const user: IUser = await User.create({ firstname,lastname,username, email, password: hashedPassword });
       return res.status(201).json(user);
+
     } catch (error) {
       console.error('Error during signup:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
@@ -37,9 +38,9 @@ class UserController {
       const userId: string = req.params.userId;
       const { username, email, password } = req.body;
 
-      // Check if a new password is provided
+
       if (password) {
-        // Hash the new password before updating
+
         const hashedPassword = await hash(password, 10);
         req.body.password = hashedPassword;
       }
