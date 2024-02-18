@@ -71,6 +71,16 @@ class ArticleController {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+  async getOneArticle(req: Request, res: Response): Promise<Response> {
+    try {
+      const { id } = req.params;
+      const singleArticle = await ArticleModel.findById(id);
+      return res.status(200).json(singleArticle);
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
 }
 
 export default new ArticleController();
