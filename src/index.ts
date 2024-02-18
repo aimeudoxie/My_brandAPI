@@ -2,7 +2,7 @@ import express from 'express';
 import dbConnect from './database/dbconnect';
 import userRoute from './routes/userRoute';
 import articleRoute from './routes/articleRoute';
-
+import messageRoute from './routes/messageRoute';
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -12,6 +12,7 @@ dbConnect();
 
 app.use('/api', userRoute);
 app.use('/api', articleRoute);
+app.use('/api', messageRoute);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

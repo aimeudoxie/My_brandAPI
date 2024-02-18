@@ -12,6 +12,9 @@ const dbConnect = async (): Promise<void> => {
   } catch (error) {
     console.log('error', (error as Error).message);
   }
+  
+
 };
 
 export default dbConnect;
+
