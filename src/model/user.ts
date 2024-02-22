@@ -15,9 +15,11 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
   },
   firstname: {
     type: String,
+    unique: true,
   },
   lastname: {
     type: String,
+    unique: true,
   },
   email: {
     type: String,
@@ -26,9 +28,10 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
   },
   password: {
     type: String,
+    unique: true,
   }
 });
-
+ 
 const User = mongoose.model<IUser>('User', userSchema);
 
-export default User;
+export {userSchema, User};

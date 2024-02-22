@@ -1,61 +1,66 @@
 import { Request, Response } from 'express';
-import User, { IUser } from '../model/user';
+import { User, IUser } from '../model/user';
+import { validateUser,validateupdatedUser } from '../validations/userValidation';
 
-import { hash } from 'bcryptjs'
 
 class UserController {
-  
   static async signup(req: Request, res: Response): Promise<Response> {
     try {
-      const { firstname,lastname,username, email, password } = req.body;
+      const { firstname, lastname, username, email, password } = req.body;
+      const userData = await validateUser({ firstname, lastname, username, email, password });
 
-      if (!username || !email || !password) {
-        return res.status(400).json({ error: 'Username, email, and password are required' });
+      if ('validationErrors' in userData) {
+        const { validationErrors } = userData;
+        return res.status(400).json({ status:'fail', validationErrors });
       }
-      const hashedPassword = await hash(password, 10);
 
-      const user: IUser = await User.create({ firstname,lastname,username, email, password: hashedPassword });
-      return res.status(201).json(user);
-
+      const user: IUser = await User.create(userData);
+      return res.status(201).json({ status:'Success', data: user });
     } catch (error) {
       console.error('Error during signup:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+
     }
   }
 
   static async getAllUsers(_req: Request, res: Response): Promise<Response> {
     try {
-      const users: IUser[] = await User.find();
-      return res.status(200).json(users);
+      const users: IUser[] = await User.find().select('-password');
+
+      return res.status(200).json({status:'success', data: users});
     } catch (error) {
       console.error('Error fetching users:', error);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
   }
+
 
   static async updateUser(req: Request, res: Response): Promise<Response> {
     try {
       const userId: string = req.params.userId;
-      const { username, email, password } = req.body;
+      const {firstname,lastname, username, email, password } = req.body;
 
+      // Validate user input
+      const updatedUserData = await validateupdatedUser({ firstname,lastname,username, email, password });
 
-      if (password) {
-
-        const hashedPassword = await hash(password, 10);
-        req.body.password = hashedPassword;
+      if ('validationErrors' in updatedUserData) {
+        const { validationErrors } = updatedUserData;
+        return res.status(400).json({ status:"fail", validationErrors });
       }
 
-      const updatedUser: IUser | null = await User.findByIdAndUpdate(userId, req.body, { new: true });
+            const updatedUser: IUser | null = await User.findByIdAndUpdate(userId, updatedUserData, { new: true });
+
       if (!updatedUser) {
-        return res.status(404).json({ error: 'User not found' });
+        return res.status(404).json({status:'fail', error: 'User not found' });
       }
 
-      return res.status(200).json(updatedUser);
+      return res.status(200).json({status:'Success', data: updatedUser});
     } catch (error) {
       console.error('Error updating user:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+
 
   static async deleteUser(req: Request, res: Response): Promise<Response> {
     try {
@@ -63,10 +68,10 @@ class UserController {
       const deletedUser: IUser | null = await User.findByIdAndDelete(userId);
 
       if (!deletedUser) {
-        return res.status(404).json({ error: 'User not found' });
+        return res.status(404).json({ status:"fail", error: 'User not found' });
       }
+      return res.status(200).json({status:'Success',message:'User successfully Deleted'});
 
-      return res.status(204).send();
     } catch (error) {
       console.error('Error deleting user:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
