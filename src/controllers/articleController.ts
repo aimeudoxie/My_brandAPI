@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Article, IArticle } from '../model/article';
-import { User, IUser } from '../model/user';
 import { validateArticle,validateupdatedArticle } from '../validations/articleValidation'; 
+
 
 class ArticleController {
   async createArticle(req: Request, res: Response): Promise<Response | IArticle> {
@@ -89,52 +89,6 @@ class ArticleController {
       return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
   }
-
-
-
-
-  async addComment(req: Request, res: Response): Promise<IArticle | null> {
-    try {
-      const { articleId, userId } = req.params;
-      const { text, username } = req.body;
-  
-      // Check if the article exists
-      const article = await Article.findById(articleId);
-  
-      if (!article) {
-        throw new Error('Article not found');
-      }
-  
-      // Check if the user exists
-      const user = await User.findById(userId);
-  
-      if (!user) {
-        throw new Error('User not found');
-      }
-      if (!user.username) {
-        throw new Error('User does not have a username');
-      }
-      // Create a new comment
-      const newComment = {
-        user: user._id,
-        username: user.username, 
-        text,
-        createdAt: new Date(),
-      };
-  
-      // Add the comment to the article's comments array
-      article.comments.push(newComment);
-  
-      // Save the updated article
-      const updatedArticle = await article.save();
-  
-      return updatedArticle;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-  
 
 }
 

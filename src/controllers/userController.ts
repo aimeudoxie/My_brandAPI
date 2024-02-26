@@ -1,21 +1,25 @@
 import { Request, Response } from 'express';
 import { User, IUser } from '../model/user';
 import { validateUser,validateupdatedUser } from '../validations/userValidation';
-
+import { Article, IArticle } from '../model/article';
 
 class UserController {
   static async signup(req: Request, res: Response): Promise<Response> {
     try {
-      const { firstname, lastname, username, email, password } = req.body;
-      const userData = await validateUser({ firstname, lastname, username, email, password });
+      const { firstname, lastname, username, email, password,role} = req.body;
+     
+      const userData = await validateUser({ firstname, lastname, username, email, password,role});
 
       if ('validationErrors' in userData) {
         const { validationErrors } = userData;
         return res.status(400).json({ status:'fail', validationErrors });
       }
+      
 
       const user: IUser = await User.create(userData);
+
       return res.status(201).json({ status:'Success', data: user });
+
     } catch (error) {
       console.error('Error during signup:', error);
       return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
@@ -38,10 +42,10 @@ class UserController {
   static async updateUser(req: Request, res: Response): Promise<Response> {
     try {
       const userId: string = req.params.userId;
-      const {firstname,lastname, username, email, password } = req.body;
+      const {firstname,lastname, username, email, password ,role} = req.body;
 
       // Validate user input
-      const updatedUserData = await validateupdatedUser({ firstname,lastname,username, email, password });
+      const updatedUserData = await validateupdatedUser({ firstname,lastname,username, email, password,role });
 
       if ('validationErrors' in updatedUserData) {
         const { validationErrors } = updatedUserData;
@@ -65,15 +69,28 @@ class UserController {
   static async deleteUser(req: Request, res: Response): Promise<Response> {
     try {
       const userId: string = req.params.userId;
+
+      // Find and retrieve all articles created by the user
+      const userArticles: IArticle[] = await Article.find({ 'comments.user': userId });
+
+      const updateArticlesPromises = userArticles.map(async (article) => {
+        article.comments = article.comments.filter(comment => comment.userid !== userId);
+        await article.save();
+      });
+
+      await Promise.all(updateArticlesPromises);
+
+      // Delete the user
       const deletedUser: IUser | null = await User.findByIdAndDelete(userId);
 
       if (!deletedUser) {
-        return res.status(404).json({ status:"fail", error: 'User not found' });
+        return res.status(404).json({ status: "fail", error: 'User not found' });
       }
-      return res.status(200).json({status:'Success',message:'User successfully Deleted'});
+
+      return res.status(200).json({ status: 'Success', message: 'User successfully deleted' });
 
     } catch (error) {
-      console.error('Error deleting user:', error);
+      console.error('Error deleting user and associated comments:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
