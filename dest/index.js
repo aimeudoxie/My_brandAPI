@@ -24,3 +24,4 @@ app.use('/api', commentRoute_1.default);
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
+exports.default = app;
