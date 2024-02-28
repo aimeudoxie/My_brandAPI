@@ -14,6 +14,4 @@ ArticleRoute.put('/articles/:id',authenticateToken,authenticateAdmin,  upload.si
 ArticleRoute.delete('/articles/:id',authenticateToken,authenticateAdmin,  articleController.deleteArticle);
 
 
-//ArticleRoute.delete('/deletecomment/:articleId/:commentId', commentController.deleteComment);
-
 export default ArticleRoute;
