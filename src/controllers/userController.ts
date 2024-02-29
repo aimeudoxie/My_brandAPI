@@ -69,17 +69,6 @@ class UserController {
   static async deleteUser(req: Request, res: Response): Promise<Response> {
     try {
       const userId: string = req.params.userId;
-
-      // Find and retrieve all articles created by the user
-      const userArticles: IArticle[] = await Article.find({ 'comments.user': userId });
-
-      const updateArticlesPromises = userArticles.map(async (article) => {
-        article.comments = article.comments.filter(comment => comment.userid !== userId);
-        await article.save();
-      });
-
-      await Promise.all(updateArticlesPromises);
-
       // Delete the user
       const deletedUser: IUser | null = await User.findByIdAndDelete(userId);
 

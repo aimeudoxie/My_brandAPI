@@ -11,10 +11,28 @@
       "description": ""
     }
   ],
-  
+  "tags": [
+    {
+      "name": "user",
+      "description": "Operations related to user management"
+    },
+    {
+      "name": "article",
+      "description": "Operations related to articles"
+    },
+    {
+      "name": "message",
+      "description": "Operations related to messages"
+    },
+    {
+      "name": "comment",
+      "description": "Operations related to comments"
+    }
+  ],
   "paths": {
     "/api/users": {
       "get": {
+        "tags": ["user"],
         "description": "",
         "parameters": [
           {
@@ -46,6 +64,8 @@
     },
     "/api/signup": {
       "post": {
+        "tags": ["user"],
+        "summary": "create user",
         "description": "",
         "responses": {
           "201": {
@@ -91,7 +111,9 @@
     },
     "/api/users/{userId}": {
       "put": {
+        "tags": ["user"],
         "description": "",
+        "summary": "Update user",
         "parameters": [
           {
             "name": "userId",
@@ -160,7 +182,9 @@
         }
       },
       "delete": {
+        "tags": ["user"],
         "description": "",
+        "summary": "Delete User",
         "parameters": [
           {
             "name": "userId",
@@ -199,7 +223,9 @@
     },
     "/api/articles": {
       "get": {
+        "tags": ["article"],
         "description": "",
+        "summary": "All Articles",
         "responses": {
           "200": {
             "description": "OK"
@@ -212,6 +238,8 @@
     },
     "/api/articles/{id}": {
       "get": {
+        "tags": ["article"],
+        "summary": "Specific Article",
         "description": "",
         "parameters": [
           {
@@ -233,6 +261,8 @@
         }
       },
       "put": {
+        "tags": ["article"],
+        "summary": "Update article",
         "description": "",
         "parameters": [
           {
@@ -290,7 +320,9 @@
         }
       },
       "delete": {
+        "tags": ["article"],
         "description": "",
+        "summary": "Delete Article",
         "parameters": [
           {
             "name": "id",
@@ -329,7 +361,9 @@
     },
     "/api/create": {
       "post": {
+        "tags": ["article"],
         "description": "",
+        "summary": "Create Article",
         "parameters": [
           {
             "name": "Authorization",
@@ -380,7 +414,9 @@
     },
     "/api/sendmessage": {
       "post": {
+        "tags": ["message"],
         "description": "",
+        "summary": "Send Message",
         "parameters": [
           {
             "name": "Authorization",
@@ -437,7 +473,9 @@
     },
     "/api/read": {
       "get": {
+        "tags": ["message"],
         "description": "",
+        "summary": "Read Messages",
         "parameters": [
           {
             "name": "Authorization",
@@ -468,7 +506,9 @@
     },
     "/api/login": {
       "post": {
+        "tags": ["user"],
         "description": "",
+        "summary": "User Login",
         "responses": {
           "200": {
             "description": "OK"
@@ -504,6 +544,8 @@
     },
     "/api/addcomment/{id}": {
       "post": {
+        "tags": ["comment"],
+        "summary": "Adding Comment on article",
         "description": "",
         "parameters": [
           {
@@ -559,7 +601,9 @@
     },
     "/api/deletecomment/{articleId}/{commentId}": {
       "delete": {
+        "tags": ["comment"],
         "description": "",
+        "summary": "Delete Comment",
         "parameters": [
           {
             "name": "articleId",

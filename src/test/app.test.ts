@@ -160,22 +160,9 @@ it("POST /api/addcomment/:id should post a comment", async () => {
     console.log('Response Body:', response.body);
   }
   const createdcomment = response.body;
-    const userWithId = { ...createdcomment, id: createdcomment._id };
+    const commentWithId = { ...createdcomment, id: createdcomment._id };
     commentId = createdcomment._id;
 
-});
-it("DELETE /users/:userId should delete the specified user", async () => {
-  const response = await request(app)
-    .delete(`/api/users/${userId}`)
-    .set("Authorization", authToken);
-  expect(response.status).toBe(200);
-});
-
-it("DELETE /api/articles/:id should delete the specified article", async () => {
-  const response = await request(app)
-    .delete(`/api/articles/${ArticleId}`)
-    .set("Authorization", authToken);
-  expect(response.status).toBe(200);
 });
 it("DELETE /api/deletecomment/:articleId/:commentId should delete the specified comment", async () => {
   const response = await request(app)
@@ -183,6 +170,21 @@ it("DELETE /api/deletecomment/:articleId/:commentId should delete the specified 
     .set("Authorization", authToken);
   expect(response.status).toBe(200);
 });
+it("DELETE /api/articles/:id should delete the specified article", async () => {
+  const response = await request(app)
+    .delete(`/api/articles/${ArticleId}`)
+    .set("Authorization", authToken);
+  expect(response.status).toBe(200);
+});
+it("DELETE /api/users/:userId should delete the specified user", async () => {
+  const response = await request(app)
+    .delete(`/api/users/${userId}`)
+    .set("Authorization", authToken);
+  expect(response.status).toBe(200);
+});
+
+
+
 
 });
 

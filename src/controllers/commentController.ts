@@ -1,3 +1,4 @@
+//commentcontroller.ts
 import { Request, Response } from 'express';
 import { Article, IArticle } from '../model/article';
 import { User, IUser } from '../model/user';
@@ -68,11 +69,10 @@ class CommentController {
         // Check if the comment exists
         const comment = article.comments.find((c) => c._id.toString() === commentId);
 if (!comment) {
-  console.error('Comment not found');
-  return res.status(404).json({ status: 'error', message: 'Comment not found' });
-}
-  
-        // Check if the user owns the comment
+res.status(404).json({ status: 'error', message: 'Comment not found' });
+return; 
+
+}        // Check if the user owns the comment
         if (comment.userid !== userId) {
           return res.status(403).json({ status: 'error', message: 'Unauthorized: User does not own the comment' });
         }
