@@ -29,7 +29,7 @@ export async function authenticateToken(req: Request, res: Response, next: NextF
         return res.status(403).json({ status:'Fail', error: 'Invalid token' });
       }
 
-      console.log('Decoded Token:', decodedToken);
+      //console.log('Decoded Token:', decodedToken);
 
       const userId = (decodedToken as { userId: string }).userId;
 

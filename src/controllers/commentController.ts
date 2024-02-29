@@ -39,7 +39,6 @@ class CommentController {
         }) as IComment;
         
         article.comments.push(newComment);
-        console.log(newComment);
 
         const updatedArticle = await article.save();
       });
@@ -68,18 +67,18 @@ class CommentController {
   
         // Check if the comment exists
         const comment = article.comments.find((c) => c._id.toString() === commentId);
-        if (!comment) {
-          return res.status(404).json({ status: 'error', message: 'Comment not found' });
-        }
+if (!comment) {
+  console.error('Comment not found');
+  return res.status(404).json({ status: 'error', message: 'Comment not found' });
+}
   
         // Check if the user owns the comment
         if (comment.userid !== userId) {
           return res.status(403).json({ status: 'error', message: 'Unauthorized: User does not own the comment' });
         }
   
-        // Remove the comment from the array
         article.comments = article.comments.filter((c) => c._id.toString() !== commentId);
-        // Save the updated article
+    
         await article.save();
       });
       return res.status(200).json({ status: 'success', message: 'Comment deleted successfully' });
