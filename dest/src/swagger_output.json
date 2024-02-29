@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "https://my-brandapi.onrender.com",
+            "url": "http://localhost:3000",
             "description": ""
         }
     ],
@@ -65,7 +65,7 @@
         "/api/signup": {
             "post": {
                 "tags": ["user"],
-                "summary": "User Creation",
+                "summary": "create user",
                 "description": "",
                 "responses": {
                     "201": {
@@ -113,6 +113,7 @@
             "put": {
                 "tags": ["user"],
                 "description": "",
+                "summary": "Update user",
                 "parameters": [
                     {
                         "name": "userId",
@@ -183,6 +184,7 @@
             "delete": {
                 "tags": ["user"],
                 "description": "",
+                "summary": "Delete User",
                 "parameters": [
                     {
                         "name": "userId",
@@ -223,6 +225,7 @@
             "get": {
                 "tags": ["article"],
                 "description": "",
+                "summary": "All Articles",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -236,6 +239,7 @@
         "/api/articles/{id}": {
             "get": {
                 "tags": ["article"],
+                "summary": "Specific Article",
                 "description": "",
                 "parameters": [
                     {
@@ -258,6 +262,7 @@
             },
             "put": {
                 "tags": ["article"],
+                "summary": "Update article",
                 "description": "",
                 "parameters": [
                     {
@@ -317,6 +322,7 @@
             "delete": {
                 "tags": ["article"],
                 "description": "",
+                "summary": "Delete Article",
                 "parameters": [
                     {
                         "name": "id",
@@ -357,6 +363,7 @@
             "post": {
                 "tags": ["article"],
                 "description": "",
+                "summary": "Create Article",
                 "parameters": [
                     {
                         "name": "Authorization",
@@ -409,6 +416,7 @@
             "post": {
                 "tags": ["message"],
                 "description": "",
+                "summary": "Send Message",
                 "parameters": [
                     {
                         "name": "Authorization",
@@ -467,6 +475,7 @@
             "get": {
                 "tags": ["message"],
                 "description": "",
+                "summary": "Read Messages",
                 "parameters": [
                     {
                         "name": "Authorization",
@@ -499,6 +508,7 @@
             "post": {
                 "tags": ["user"],
                 "description": "",
+                "summary": "User Login",
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -535,6 +545,7 @@
         "/api/addcomment/{id}": {
             "post": {
                 "tags": ["comment"],
+                "summary": "Adding Comment on article",
                 "description": "",
                 "parameters": [
                     {
@@ -592,6 +603,7 @@
             "delete": {
                 "tags": ["comment"],
                 "description": "",
+                "summary": "Delete Comment",
                 "parameters": [
                     {
                         "name": "articleId",
