@@ -11,7 +11,7 @@ const messageRoute_1 = __importDefault(require("./routes/messageRoute"));
 const loginRoute_1 = __importDefault(require("./routes/loginRoute"));
 const commentRoute_1 = __importDefault(require("./routes/commentRoute"));
 const swaggerUi = require("swagger-ui-express");
-const swaggerOutput = require("./swagger-output.json");
+const swaggerOutput = require("./swagger_output.json");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
