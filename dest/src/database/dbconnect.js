@@ -18,7 +18,7 @@ mongoose_1.default.set('strictQuery', false);
 dotenv_1.default.config();
 const dbConnect = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect('mongodb+srv://eudoxie:umwamikazi@cluster0.ev0bus6.mongodb.net/my_brand');
+        yield mongoose_1.default.connect('mongodb+srv://eudoxie:umwamikazi@cluster0.ev0bus6.mongodb.net/my_brandtest');
         console.log('Database Connected!');
     }
     catch (error) {

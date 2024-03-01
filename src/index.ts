@@ -24,7 +24,7 @@ app.use('/api', loginRoute);
 app.use('/api',commentRoute);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
-app.listen(port, () => {
+const server= app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
-export default app;
+export{app,server} ;

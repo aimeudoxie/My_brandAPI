@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const supertest_1 = __importDefault(require("supertest"));
-const index_1 = __importDefault(require("../index"));
+const index_1 = require("../index");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 describe("API Endpoints", () => {
@@ -30,6 +30,7 @@ describe("API Endpoints", () => {
     }));
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield mongoose_1.default.connection.close();
+        index_1.server.close();
     }));
     it("POST /api/signup should register a user", () => __awaiter(void 0, void 0, void 0, function* () {
         const user = {
@@ -40,7 +41,7 @@ describe("API Endpoints", () => {
             role: "admin",
             password: "testing",
         };
-        const response = yield (0, supertest_1.default)(index_1.default).post("/api/signup").send(user);
+        const response = yield (0, supertest_1.default)(index_1.server).post("/api/signup").send(user);
         if (response.status !== 201) {
             console.log('Response Body:', response.body);
         }
@@ -55,13 +56,13 @@ describe("API Endpoints", () => {
             email: "test@gmail.com",
             password: "testing",
         };
-        const response = yield (0, supertest_1.default)(index_1.default).post("/api/login").send(credentials);
+        const response = yield (0, supertest_1.default)(index_1.server).post("/api/login").send(credentials);
         expect(response.status).toBe(200);
         authToken = response.body.token;
         expect(authToken).toBeTruthy();
     }));
     it("GET /api/users should return a list of users", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .get("/api/users")
             .set("Authorization", authToken);
         expect(response.status).toBe(200);
@@ -74,13 +75,13 @@ describe("API Endpoints", () => {
             text: "testing",
             read: "false"
         };
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .post("/api/sendmessage").send(message)
             .set("Authorization", authToken);
         expect(response.status).toBe(201);
     }));
     it("GET /api/read should return a list of messages", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .get("/api/read")
             .set("Authorization", authToken);
         expect(response.status).toBe(200);
@@ -90,7 +91,7 @@ describe("API Endpoints", () => {
             firstname: "testuser1",
             lastname: "testuser1"
         };
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .put(`/api/users/${userId}`)
             .send(user)
             .set("Authorization", authToken);
@@ -101,7 +102,7 @@ describe("API Endpoints", () => {
             title: "testing article",
             text: "testing article",
         };
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .post("/api/create")
             .field('title', article.title)
             .field('text', article.text)
@@ -120,19 +121,19 @@ describe("API Endpoints", () => {
             title: "testing article title",
             text: "testing article text"
         };
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .put(`/api/articles/${ArticleId}`)
             .send(article)
             .set("Authorization", authToken);
         expect(response.status).toBe(200);
     }));
     it("GET /api/articles/:id should return a specific article", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .get(`/api/articles/${ArticleId}`);
         expect(response.status).toBe(200);
     }));
     it("GET /api/articles should return a list of articles", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .get("/api/articles");
         expect(response.status).toBe(200);
     }));
@@ -143,7 +144,7 @@ describe("API Endpoints", () => {
             text: "testing comments",
             createdAt: new Date(),
         };
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .post(`/api/addcomment/${ArticleId}`).send(comment)
             .set("Authorization", authToken);
         expect(response.status).toBe(201);
@@ -155,19 +156,19 @@ describe("API Endpoints", () => {
         commentId = createdcomment._id;
     }));
     it("DELETE /api/deletecomment/:articleId/:commentId should delete the specified comment", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .delete(`/api/deletecomment/${ArticleId}/${commentId}`)
             .set("Authorization", authToken);
         expect(response.status).toBe(200);
     }));
     it("DELETE /api/articles/:id should delete the specified article", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .delete(`/api/articles/${ArticleId}`)
             .set("Authorization", authToken);
         expect(response.status).toBe(200);
     }));
     it("DELETE /api/users/:userId should delete the specified user", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(index_1.default)
+        const response = yield (0, supertest_1.default)(index_1.server)
             .delete(`/api/users/${userId}`)
             .set("Authorization", authToken);
         expect(response.status).toBe(200);
