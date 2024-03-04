@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const supertest_1 = __importDefault(require("supertest"));
 const index_1 = require("../index");
+const articleValidation_1 = require("../validations/articleValidation");
+const userValidation_1 = require("../validations/userValidation");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 describe("API Endpoints", () => {
@@ -34,10 +36,10 @@ describe("API Endpoints", () => {
     }));
     it("POST /api/signup should register a user", () => __awaiter(void 0, void 0, void 0, function* () {
         const user = {
-            firstname: "test",
-            lastname: "test",
-            username: "test",
-            email: "test@gmail.com",
+            firstname: "test3",
+            lastname: "test3",
+            username: "test3",
+            email: "test3@gmail.com",
             role: "admin",
             password: "testing",
         };
@@ -151,9 +153,10 @@ describe("API Endpoints", () => {
         if (response.status !== 201) {
             console.log('Response Body:', response.body);
         }
-        const createdcomment = response.body;
+        console.log(response.body);
+        const createdcomment = response.body.newComment;
         const commentWithId = Object.assign(Object.assign({}, createdcomment), { id: createdcomment._id });
-        commentId = createdcomment._id;
+        commentId = commentWithId._id;
     }));
     it("DELETE /api/deletecomment/:articleId/:commentId should delete the specified comment", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(index_1.server)
@@ -172,5 +175,100 @@ describe("API Endpoints", () => {
             .delete(`/api/users/${userId}`)
             .set("Authorization", authToken);
         expect(response.status).toBe(200);
+    }));
+    it('should validate article data successfully', () => __awaiter(void 0, void 0, void 0, function* () {
+        const articleData = {
+            title: 'Sample Title',
+            text: 'Sample Text',
+            imagePath: 'sample/image/path.jpg',
+        };
+        const result = yield (0, articleValidation_1.validateArticle)(articleData, {});
+        expect(result).toEqual({
+            title: 'Sample Title',
+            text: 'Sample Text',
+            imagePath: 'sample/image/path.jpg',
+        });
+    }));
+    it('should handle validation errors', () => __awaiter(void 0, void 0, void 0, function* () {
+        const invalidArticleData = {
+        // Missing required fields
+        };
+        const result = yield (0, articleValidation_1.validateArticle)(invalidArticleData, {});
+        expect(result).toHaveProperty('validationErrors');
+        const validationErrors = result.validationErrors;
+        expect(validationErrors).toHaveProperty('title');
+        expect(validationErrors).toHaveProperty('text');
+        expect(validationErrors).toHaveProperty('imagePath');
+    }));
+    it('should validate updated article data successfully', () => __awaiter(void 0, void 0, void 0, function* () {
+        const articleData = {
+            title: 'Updated Title',
+            text: 'Updated Text',
+            imagePath: 'updated/image/path.jpg',
+        };
+        const result = yield (0, articleValidation_1.validateupdatedArticle)(articleData, {});
+        expect(result).toEqual({
+            title: 'Updated Title',
+            text: 'Updated Text',
+            imagePath: 'updated/image/path.jpg',
+        });
+    }));
+    it('should handle validation errors for updated article', () => __awaiter(void 0, void 0, void 0, function* () {
+        const invalidArticleData = {
+            // Invalid values for optional fields
+            title: '', // Assuming title is optional
+        };
+        const result = yield (0, articleValidation_1.validateupdatedArticle)(invalidArticleData, {});
+        expect(result).toHaveProperty('validationErrors');
+        const validationErrors = result.validationErrors;
+        expect(validationErrors).toHaveProperty('title');
+    }));
+    it('should validate user data successfully', () => __awaiter(void 0, void 0, void 0, function* () {
+        const userData = {
+            firstname: 'John',
+            lastname: 'Doe',
+            username: 'john_doe',
+            email: 'john@example.com',
+            password: 'password123',
+            role: 'user',
+        };
+        const result = yield (0, userValidation_1.validateUser)(userData);
+        expect(result).toEqual({
+            firstname: 'John',
+            lastname: 'Doe',
+            username: 'john_doe',
+            email: 'john@example.com',
+            password: expect.any(String), // Hashed password
+            role: 'user',
+        });
+    }));
+    it('should validate updated user data successfully', () => __awaiter(void 0, void 0, void 0, function* () {
+        const userData = {
+            firstname: 'Updated John',
+            lastname: 'Updated Doe',
+            username: 'updated_john_doe',
+            email: 'updated_john@example.com',
+            password: 'updated_password123',
+            role: 'admin',
+        };
+        const result = yield (0, userValidation_1.validateupdatedUser)(userData);
+        expect(result).toEqual({
+            firstname: 'Updated John',
+            lastname: 'Updated Doe',
+            username: 'updated_john_doe',
+            email: 'updated_john@example.com',
+            password: expect.any(String), // Hashed password
+            role: 'admin',
+        });
+    }));
+    it('should handle validation errors for updated user', () => __awaiter(void 0, void 0, void 0, function* () {
+        const invalidUserData = {
+            // Invalid values for optional fields
+            firstname: '', // Assuming firstname is optional
+        };
+        const result = yield (0, userValidation_1.validateupdatedUser)(invalidUserData);
+        expect(result).toHaveProperty('validationErrors');
+        const validationErrors = result.validationErrors;
+        expect(validationErrors).toHaveProperty('firstname');
     }));
 });

@@ -5,6 +5,7 @@ import { validateArticle,validateupdatedArticle } from '../validations/articleVa
 
 class ArticleController {
   async createArticle(req: Request, res: Response): Promise<Response | IArticle> {
+    
     try {
       const { title, text } = req.body;
       const imagePath = req.file?.path;
@@ -17,10 +18,12 @@ class ArticleController {
       }
 
       const newArticle: IArticle = new Article(UpdatedArticleData);
+
       await newArticle.save();
 
-      return res.status(201).json({ status:'Success', data: newArticle });
-    } catch (error) {
+      return res.status(201).json({ status:'Success', data: newArticle});
+    } 
+    catch (error) {
       console.error(error);
       return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }

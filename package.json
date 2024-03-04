@@ -4,9 +4,10 @@
   "description": " ",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest --testTimeout=50000 --detectOpenHandles ",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=50000 --detectOpenHandles --config=jest.config.ts",
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc --watch"
+    
   },
   "keywords": [],
   "author": "",

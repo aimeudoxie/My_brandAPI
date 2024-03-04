@@ -71,11 +71,9 @@ class UserController {
       const userId: string = req.params.userId;
       // Delete the user
       const deletedUser: IUser | null = await User.findByIdAndDelete(userId);
-
       if (!deletedUser) {
         return res.status(404).json({ status: "fail", error: 'User not found' });
       }
-
       return res.status(200).json({ status: 'Success', message: 'User successfully deleted' });
 
     } catch (error) {

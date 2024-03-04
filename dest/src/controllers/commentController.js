@@ -11,42 +11,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const article_1 = require("../model/article");
 const user_1 = require("../model/user");
-const authMiddleware_1 = require("../middleware/authMiddleware");
 const comment_1 = require("../model/comment");
+const authMiddleware_1 = require("../middleware/authMiddleware");
 class CommentController {
     addComment(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield (0, authMiddleware_1.authenticateToken)(req, res, () => __awaiter(this, void 0, void 0, function* () {
-                    if (!req.user) {
-                        return res.status(401).json({ error: 'Unauthorized: User not authenticated' });
-                    }
-                    const { id } = req.params;
-                    const { text, username, userid, createdAt } = req.body;
-                    const userId = req.user.id;
-                    // Check if the article exists
-                    const article = yield article_1.Article.findById(id);
-                    if (!article) {
-                        return res.status(404).json({ status: 'error', message: 'Article not found' });
-                    }
-                    // Check if the user exists
-                    const user = yield user_1.User.findById(userId);
-                    if (!user) {
-                        return res.status(404).json({ status: 'error', message: 'User not found' });
-                    }
-                    if (!user.username) {
-                        return res.status(400).json({ status: 'error', message: 'User does not have a username' });
-                    }
-                    const newComment = yield comment_1.Comment.create({
-                        userid: userId,
-                        username: user.username,
-                        text,
-                        createdAt: new Date(),
-                    });
-                    article.comments.push(newComment);
-                    const updatedArticle = yield article.save();
+                return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+                    yield (0, authMiddleware_1.authenticateToken)(req, res, () => __awaiter(this, void 0, void 0, function* () {
+                        if (!req.user) {
+                            return resolve(res.status(401).json({ error: 'Unauthorized: User not authenticated' }));
+                        }
+                        const userId = req.user.id;
+                        const { id } = req.params;
+                        const { text, username, userid, createdAt } = req.body;
+                        // Check if the article exists
+                        const article = yield article_1.Article.findById(id);
+                        if (!article) {
+                            return resolve(res.status(404).json({ status: 'error', message: 'Article not found' }));
+                        }
+                        // Check if the user exists
+                        const user = yield user_1.User.findById(userId);
+                        if (!user) {
+                            return resolve(res.status(404).json({ status: 'error', message: 'User not found' }));
+                        }
+                        if (!user.username) {
+                            return resolve(res.status(400).json({ status: 'error', message: 'User does not have a username' }));
+                        }
+                        let newComment = yield comment_1.Comment.create({
+                            userid: userId,
+                            username: user.username,
+                            text,
+                            createdAt: new Date(),
+                        });
+                        article.comments.push(newComment);
+                        yield article.save();
+                        // Respond with the created comment data and success message
+                        resolve(res.status(201).json({ status: 'success', message: 'Comment created successfully', newComment }));
+                    }));
                 }));
-                return res.status(201).json({ status: 'success', message: 'Comment added successfully' });
             }
             catch (error) {
                 console.error('Error adding comment:', error);
@@ -69,17 +72,19 @@ class CommentController {
                     if (!article) {
                         return res.status(404).json({ status: 'error', message: 'Article not found' });
                     }
-                    // Check if the comment exists
-                    const comment = article.comments.find((c) => c._id.toString() === commentId);
-                    if (!comment) {
-                        res.status(404).json({ status: 'error', message: 'Comment not found' });
-                        return;
-                    } // Check if the user owns the comment
-                    if (comment.userid !== userId) {
+                    const commentIndex = article.comments.findIndex((c) => c._id.toString() === commentId);
+                    if (commentIndex === -1) {
+                        return res.status(404).json({ status: 'error', message: 'Comment not found' });
+                    }
+                    // Check user ownership
+                    if (article.comments[commentIndex].userid !== userId) {
                         return res.status(403).json({ status: 'error', message: 'Unauthorized: User does not own the comment' });
                     }
-                    article.comments = article.comments.filter((c) => c._id.toString() !== commentId);
-                    yield article.save();
+                    // Use findByIdAndUpdate for atomic operation
+                    // Remove the comment from the comments array
+                    article.comments.splice(commentIndex, 1);
+                    // Save the updated article
+                    const updatedArticle = yield article_1.Article.findByIdAndUpdate(articleId, article, { new: true });
                 }));
                 return res.status(200).json({ status: 'success', message: 'Comment deleted successfully' });
             }

@@ -6,6 +6,7 @@ interface IComment extends Document {
   username: string;
   text: string;
   createdAt: Date;
+  
 }
 
 const commentSchema = new Schema<IComment>({
