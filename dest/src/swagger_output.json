@@ -2,8 +2,8 @@
     "openapi": "3.0.0",
     "info": {
         "version": "v1.0.0",
-        "title": "my_brandAPI swagger demo",
-        "description": "Documenting my_brandAPI with swagger"
+        "title": "my_brandAPI",
+        "description": "Documenting my_brandAPI "
     },
     "servers": [
         {
