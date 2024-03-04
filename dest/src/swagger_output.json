@@ -7,7 +7,7 @@
     },
     "servers": [
       {
-        "url": "my-brandapi.onrender.com",
+        "url": "https://my-brandapi.onrender.com",
         "description": ""
       }
     ],
