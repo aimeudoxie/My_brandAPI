@@ -192,7 +192,7 @@
       }}
     },
      
-    "api/users/{userId}": {
+    "/api/users/{userId}": {
       "put": {
         "tags": ["user"],
         "description": "",
