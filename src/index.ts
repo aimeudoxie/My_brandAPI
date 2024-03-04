@@ -8,6 +8,7 @@ import commentRoute from './routes/commentRoute';
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger_output.json";
 import dotenv from 'dotenv';
+const cors = require('cors');
 dotenv.config();
 
 const app = express();
@@ -16,7 +17,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 dbConnect();
-
+app.use(cors());
 app.use('/api', userRoute);
 app.use('/api', articleRoute);
 app.use('/api', messageRoute);
