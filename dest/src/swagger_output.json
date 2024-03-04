@@ -31,6 +31,7 @@
     ],
     "paths": {
       "/api/users": {
+
         "get": {
           "tags": ["user"],
           "description": "",
@@ -143,7 +144,9 @@
               }
             }
           }
+        
         },
+        
         "delete": {
           "tags": ["user"],
           "description": "",
@@ -191,6 +194,7 @@
     }
       },
       "/api/articles": {
+
         "get": {
           "tags": ["article"],
           "description": "",
@@ -204,6 +208,7 @@
             }
           }
         },
+
         "{id}": {
           "get": {
             "tags": ["article"],
@@ -341,6 +346,7 @@
           }
         }
       },
+
       "/api/create": {
         "post": {
           "tags": ["article"],
