@@ -35,21 +35,6 @@
         "tags": ["user"],
         "description": "",
         "summary": "Create user",
-        "parameters": [
-         
-          {
-            "name": "Authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
