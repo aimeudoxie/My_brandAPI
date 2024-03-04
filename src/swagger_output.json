@@ -67,6 +67,7 @@
           }
         }
       },
+      "{id}": {
       "put": {
         "tags": ["user"],
         "description": "",
@@ -187,6 +188,7 @@
           }
         }
       }
+  }
     },
     "/api/articles": {
       "get": {
