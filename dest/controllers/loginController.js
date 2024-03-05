@@ -32,15 +32,15 @@ class LoginController {
                         return res.status(401).json({ error: 'Incorrect password' });
                     }
                     const token = jsonwebtoken_1.default.sign({ userId: authUser._id, username: authUser.username }, process.env.JWT_SECRET || 'fallback_secret_key', { expiresIn: '1h' });
-                    return res.status(200).json({ user: { _id: authUser._id, username: authUser.username, email: authUser.email, role:authUser.role}, token });
+                    return res.status(200).json({ user: { _id: authUser._id, username: authUser.username, email: authUser.email,role:authUser.role}, token });
                 }
                 else {
-                    return res.status(500).json({  error: 'User password not available' });
+                    return res.status(500).json({ error: 'User password not available' });
                 }
             }
             catch (error) {
                 console.error('Error during user login:', error);
-                return res.status(500).json({  error: 'Internal Server Error' });
+                return res.status(500).json({ error: 'Internal Server Error' });
             }
         });
     }
