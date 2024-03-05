@@ -77,6 +77,7 @@ class ArticleController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const articles = yield article_1.Article.find();
+                articles.sort((a, b) => (a.createdDate > b.createdDate ? -1 : 1));
                 return res.status(200).json({ status: 'susccess', data: articles });
             }
             catch (error) {

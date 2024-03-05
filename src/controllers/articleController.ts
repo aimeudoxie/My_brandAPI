@@ -75,6 +75,7 @@ class ArticleController {
   async getAllArticles(req: Request, res: Response): Promise<Response> {
     try {
       const articles: IArticle[] = await Article.find();
+      articles.sort((a, b) => (a.createdDate > b.createdDate ? -1 : 1));
       return res.status(200).json({status:'susccess', data: articles});
 
     } catch (error) {
