@@ -28,6 +28,7 @@ app.use('/api', messageRoute_1.default);
 app.use('/api', loginRoute_1.default);
 app.use('/api', commentRoute_1.default);
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_output_json_1.default));
+app.use('/uploads', express_1.default.static('uploads'));
 const server = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
