@@ -26,7 +26,7 @@ class LoginController {
         const token = jwt.sign({ userId: authUser._id, username: authUser.username }, process.env.JWT_SECRET || 'fallback_secret_key', { expiresIn: '1h' });
 
 
-        return res.status(200).json({user: { _id: authUser._id, username: authUser.username, email: authUser.email, role:authUser.role}, token });
+        return res.status(200).json({user: { _id: authUser._id, username: authUser.username, email: authUser.email, role:authUser.role }, token });
 
         
       } else {

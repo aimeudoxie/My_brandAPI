@@ -12,7 +12,7 @@ const doc = {
     },
     servers: [
         {
-            url: 'my-brandapi.onrender.com',
+            url: 'http://localhost:3000',
             description: ''
         },
     ],
