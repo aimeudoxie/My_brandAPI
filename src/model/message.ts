@@ -6,7 +6,8 @@ interface IMessage extends Document {
     email: string;
     subject: string;
     text: string;
-    read:boolean
+    read:boolean;
+    sentAt: Date;
 }
 
 const messageSchema: Schema = new Schema({
@@ -15,6 +16,8 @@ const messageSchema: Schema = new Schema({
   subject: { type: String, required: true },
   text: { type: String, required: true },
   read: { type: Boolean, required: true},
+  sentAt: { type: Date, default: Date.now },
+
 });
 
 const MessageModel = mongoose.model<IMessage>('Message', messageSchema);
