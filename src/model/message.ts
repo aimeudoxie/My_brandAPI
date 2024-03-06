@@ -14,7 +14,7 @@ const messageSchema: Schema = new Schema({
   email: { type: String, required: true },
   subject: { type: String, required: true },
   text: { type: String, required: true },
-  read: { type: Boolean, required: true , default:'false'},
+  read: { type: Boolean, required: true},
 });
 
 const MessageModel = mongoose.model<IMessage>('Message', messageSchema);
