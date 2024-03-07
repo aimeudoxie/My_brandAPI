@@ -63,8 +63,9 @@
       }
     },
     "/api/users/{userId}": {
-      "tags": ["user"],
+      
       "get": {
+        "tags": ["user"],
         "description": "",
         "summary": "Single User",
         "parameters": [
@@ -214,8 +215,9 @@
       }
     },
     "/api/signup": {
-      "tags": ["user"],
+      
       "post": {
+        "tags": ["user"],
         "description": "",
         "summary": "Create user",
         "responses": {
