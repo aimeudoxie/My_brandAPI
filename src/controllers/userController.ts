@@ -39,6 +39,21 @@ class UserController {
   }
 
 
+  static async getOneUser(req: Request, res: Response): Promise<Response> {
+    try {
+      const userId: string = req.params.userId;
+      const singleUser = await User.findById(userId);
+      return res.status(200).json({status:'success', data: singleUser});
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+    }
+  }
+
+
+
+
+
   static async updateUser(req: Request, res: Response): Promise<Response> {
     try {
       const userId: string = req.params.userId;
