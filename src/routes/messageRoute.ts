@@ -9,6 +9,7 @@ messageRoute.get('/read', authenticateToken,authenticateAdmin, MessageController
 messageRoute.delete('/deleteMessage/:messageId', authenticateToken,authenticateAdmin, MessageController.deleteMessage);
 messageRoute.put('/updateMessage/:messageId', authenticateToken,authenticateAdmin, MessageController.updateMessage);
 messageRoute.get('/getSingleMessage/:messageId', authenticateToken,authenticateAdmin, MessageController.getSingleMessage);
+messageRoute.put('/markAsRead/:messageId', authenticateToken,authenticateAdmin, MessageController.markAsRead);
 
 export default messageRoute;
  

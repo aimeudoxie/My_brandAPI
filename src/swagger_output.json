@@ -131,7 +131,7 @@
         "get": {
           "tags": ["user"],
           "description": "",
-          "summary": "All Users",
+          "summary": "Single Users",
           "parameters": [
             {
               "name": "Authorization",

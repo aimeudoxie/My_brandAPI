@@ -75,6 +75,25 @@ class MessageController {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+  static async markAsRead(req: Request, res: Response): Promise<Response> {
+    try {
+      const messageId: string = req.params.messageId;
+      const updatedMessage: IMessage | null = await MessageModel.findByIdAndUpdate(
+        messageId,
+        { read: true },
+        { new: true }
+      );
+
+      if (!updatedMessage) {
+        return res.status(404).json({ error: 'Message not found' });
+      }
+
+      return res.status(200).json(updatedMessage);
+    } catch (error) {
+      console.error('Error marking message as read:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
 }
 
 export default MessageController;
