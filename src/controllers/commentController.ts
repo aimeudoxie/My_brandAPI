@@ -109,7 +109,7 @@ class CommentController {
         return res.status(404).json({ status: 'error', message: 'Article not found' });
       }
 
-      // Respond with all comments for the article
+      article.comments.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1));
       return res.status(200).json({ status: 'success', comments: article.comments });
     } catch (error) {
       console.error('Error getting all comments:', error);

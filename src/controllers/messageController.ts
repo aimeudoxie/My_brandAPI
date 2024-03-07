@@ -17,6 +17,7 @@ class MessageController {
   static async getAllMessages(_req: Request, res: Response): Promise<Response> {
     try {
       const messages: IMessage[] = await MessageModel.find();
+      messages.sort((a, b) => (a.sentAt > b.sentAt ? -1 : 1));
       return res.status(200).json(messages);
     } catch (error) {
       console.error('Error fetching messages:', error);
