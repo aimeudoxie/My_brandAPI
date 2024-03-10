@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import { Article, IArticle } from '../model/article';
 import { validateArticle,validateupdatedArticle } from '../validations/articleValidation'; 
 import { v2 as cloudinary} from "cloudinary";
-import 'dotenv/config';
+import  'dotenv/config';
 
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 class ArticleController {
   async createArticle(req: Request, res: Response): Promise<Response | IArticle> {
