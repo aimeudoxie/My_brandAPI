@@ -1,30 +1,15 @@
 import { Request, Response } from 'express';
 import { Article, IArticle } from '../model/article';
 import { validateArticle,validateupdatedArticle } from '../validations/articleValidation'; 
-import { v2 as cloudinary} from "cloudinary";
 import  'dotenv/config';
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
 
 class ArticleController {
   async createArticle(req: Request, res: Response): Promise<Response | IArticle> {
     
     try {
-      if(!req.file){
-        return res.status(400).json({ message: "Please upload the image" });
-      }
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "images",
-      });
-
       const { title, text } = req.body;
-      
-      
-      const imagePath = result.secure_url;
+      const imagePath = req.file?.path;
 
       const UpdatedArticleData = await validateArticle({ title, text, imagePath }, res);
 
