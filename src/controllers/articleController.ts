@@ -8,11 +8,15 @@ class ArticleController {
   async createArticle(req: Request, res: Response): Promise<Response | IArticle> {
     
     try {
-      if (!req.file)
-      return res.status(400).json({ status:'fail',error:'Upload an image'});
+      if(!req.file){
+        return res.status(400).json({ message: "Please upload the image" });
+      }
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "images",
+      });
 
       const { title, text } = req.body;
-      const result = await cloudinary.uploader.upload(req.file.path);
+      
       
       const imagePath = result.secure_url;
 
