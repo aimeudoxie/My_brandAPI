@@ -1,10 +1,11 @@
 
 
 import express from 'express';
-import { upload } from '../middleware/uploadMiddleware';
+import  upload  from '../middleware/uploadMiddleware';
 import articleController from '../controllers/articleController';
 import commentController from '../controllers/commentController';
 import { authenticateAdmin,authenticateToken } from '../middleware/authMiddleware';
+
 
 const  ArticleRoute = express.Router();
 ArticleRoute.get('/articles',articleController.getAllArticles);

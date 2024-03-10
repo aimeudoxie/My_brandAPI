@@ -1,14 +1,20 @@
 import { Request, Response } from 'express';
 import { Article, IArticle } from '../model/article';
 import { validateArticle,validateupdatedArticle } from '../validations/articleValidation'; 
-
+import cloudinary from '../helpers/cloudinary';
+import upload from '../middleware/uploadMiddleware';
 
 class ArticleController {
   async createArticle(req: Request, res: Response): Promise<Response | IArticle> {
     
     try {
+      if (!req.file)
+      return res.status(400).json({ status:'fail',error:'Upload an image'});
+
       const { title, text } = req.body;
-      const imagePath = req.file?.path;
+      const result = await cloudinary.uploader.upload(req.file.path);
+      
+      const imagePath = result.secure_url;
 
       const UpdatedArticleData = await validateArticle({ title, text, imagePath }, res);
 

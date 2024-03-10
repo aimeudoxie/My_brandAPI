@@ -28,4 +28,5 @@ app.use('/uploads',express.static('uploads'))
 const server= app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
+app.use(express.urlencoded({extended:true}));
 export{app,server} ;
