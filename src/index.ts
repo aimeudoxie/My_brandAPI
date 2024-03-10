@@ -8,6 +8,7 @@ import commentRoute from './routes/commentRoute';
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger_output.json";
 import dotenv from 'dotenv';
+import cloudinary from 'cloudinary';
 const cors = require('cors');
 dotenv.config();
 
