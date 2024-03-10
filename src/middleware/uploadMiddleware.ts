@@ -1,14 +1,15 @@
-import multer from 'multer';
+import multer from "multer";
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    },
-});
+const storage = multer.diskStorage({});
 
-const upload = multer({ storage: storage });
+const fileFilter = (req: any, file:any, cb:any) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb({ message: "Unsupported file format!" }, false);
+  }
+};
+
+const upload = multer({ storage, fileFilter });
 
 export default upload;
