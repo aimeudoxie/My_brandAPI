@@ -107,9 +107,7 @@
     "skipLibCheck": true  ,
     
     /* Skip type checking all .d.ts files. */
-    "typeRoots": ["node_modules/@types", "node_modules"],
-    "types": ["node",
-    "jest","cloudinary"]
+    "typeRoots": ["node_modules/@types", "types"],
    
   },
   "include": [
