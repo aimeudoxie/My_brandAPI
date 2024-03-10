@@ -1,4 +1,4 @@
-import {v2 as cloudinary} from 'cloudinary';
+import {v2 as cloudinary, v2} from 'cloudinary';
           
 cloudinary.config({ 
   cloud_name: 'dmhy5ah1b', 
@@ -6,4 +6,4 @@ cloudinary.config({
   api_secret: 'zXAGW-h9KNpkhbl9eRRRjpHPQLo' 
 });
 
-export default cloudinary;
+export {v2 as cloudinary};
